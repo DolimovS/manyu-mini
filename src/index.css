@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #C89B3C;
+  --teal: #1B4B48;
+  --clay: #A8512F;
+  --cream: #F8F3E8;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  overscroll-behavior-y: none;
+}
+
+body {
+  background-color: var(--cream);
+  color: #1E2A27;
+}
+
+/* Hide scrollbars but keep scrolling for pill bar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+/* Signature ikat/suzani-inspired diamond weave — used as a divider strip */
+.ikat-strip {
+  height: 7px;
+  background-image:
+    linear-gradient(45deg, var(--gold) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--gold) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--teal) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--teal) 75%);
+  background-size: 14px 14px;
+  background-position: 0 0, 0 7px, 7px -7px, -7px 0;
+  background-color: var(--clay);
+  opacity: 0.9;
+}
+
+.ikat-strip-soft {
+  height: 5px;
+  background-image:
+    linear-gradient(45deg, rgba(200,155,60,0.55) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(200,155,60,0.55) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(27,75,72,0.35) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(27,75,72,0.35) 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0;
+}
+
+/* Focus visibility for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Tabular numerals for prices */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
