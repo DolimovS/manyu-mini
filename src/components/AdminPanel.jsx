@@ -54,18 +54,22 @@ export default function AdminPanel({ items, onClose, onSave }) {
     setSavingIds((prev) => new Set([...prev, item.id]))
 
     try {
-      const payload = {
-        id: normalizedItem.id,
-        price: normalizedItem.price,
-        is_available: String(normalizedItem.is_available).toUpperCase(),
+      const url = new URL(API_URL)
+      url.searchParams.append('action', 'update')
+      url.searchParams.append('id', String(normalizedItem.id))
+      if (normalizedItem.price !== undefined) {
+        url.searchParams.append('price', String(normalizedItem.price))
+      }
+      if (normalizedItem.is_available !== undefined) {
+        url.searchParams.append(
+          'is_available',
+          String(normalizedItem.is_available).toUpperCase()
+        )
       }
 
-      await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8',
-        },
-        body: JSON.stringify(payload),
+      await fetch(url.toString(), {
+        method: 'GET',
+        mode: 'no-cors',
       })
 
       onSave({
