@@ -1,4 +1,4 @@
-import { Search, X, Lock } from 'lucide-react'
+import { Search, X, Settings2 } from 'lucide-react'
 
 export default function Header({ query, onQueryChange, onAdminClick }) {
   return (
@@ -16,9 +16,10 @@ export default function Header({ query, onQueryChange, onAdminClick }) {
           type="button"
           onClick={onAdminClick}
           aria-label="Admin"
+          title="Admin rejim"
           className="rounded-full p-2.5 text-zamin-stone transition-all hover:bg-zamin-paper hover:text-zamin-gold active:scale-95"
         >
-          <Lock className="h-5 w-5" strokeWidth={2} />
+          <Settings2 className="h-5 w-5" strokeWidth={2} />
         </button>
       </div>
 

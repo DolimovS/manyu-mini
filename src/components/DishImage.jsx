@@ -50,6 +50,7 @@ export default function DishImage({ src, name, className = '' }) {
       alt={name}
       loading="lazy"
       onError={() => setFailed(true)}
+      onLoad={() => setFailed(false)}
       className={`object-cover ${className}`}
     />
   )
