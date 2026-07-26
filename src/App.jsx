@@ -58,13 +58,19 @@ export default function App() {
   }
 
   const handleAdminSave = (savedItem) => {
+    const normalizedPrice = String(savedItem.price ?? '').trim()
+    const normalizedAvailability =
+      typeof savedItem.is_available === 'boolean'
+        ? savedItem.is_available
+        : String(savedItem.is_available ?? '').trim().toUpperCase() === 'TRUE'
+
     setItems((prev) =>
       prev.map((item) =>
         item.id === savedItem.id
           ? {
               ...item,
-              price: savedItem.price,
-              is_available: savedItem.is_available ? 'TRUE' : 'FALSE',
+              price: normalizedPrice,
+              is_available: normalizedAvailability ? 'TRUE' : 'FALSE',
             }
           : item
       )

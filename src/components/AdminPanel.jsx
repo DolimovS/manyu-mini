@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { X, Loader2 } from 'lucide-react'
 import { formatPrice } from '../utils/menu'
 
@@ -15,6 +15,16 @@ export default function AdminPanel({ items, onClose, onSave }) {
   )
   const [isLoading, setIsLoading] = useState(false)
   const [savingIds, setSavingIds] = useState(new Set())
+
+  useEffect(() => {
+    setEditedItems(
+      items.map((item) => ({
+        ...item,
+        price: String(item.price ?? ''),
+        is_available: String(item.is_available).toLowerCase() === 'true',
+      }))
+    )
+  }, [items])
 
   const handlePriceChange = (id, value) => {
     setEditedItems((prev) =>
@@ -35,27 +45,36 @@ export default function AdminPanel({ items, onClose, onSave }) {
   }
 
   const saveItem = async (item) => {
+    const normalizedItem = {
+      ...item,
+      price: String(item.price ?? '').trim(),
+      is_available: Boolean(item.is_available),
+    }
+
     setSavingIds((prev) => new Set([...prev, item.id]))
+
+    onSave({
+      ...normalizedItem,
+      price: normalizedItem.price,
+      is_available: normalizedItem.is_available,
+    })
+
     try {
       const payload = {
-        id: item.id,
-        price: item.price,
-        is_available: item.is_available ? 'TRUE' : 'FALSE',
+        id: normalizedItem.id,
+        price: normalizedItem.price,
+        is_available: normalizedItem.is_available ? 'TRUE' : 'FALSE',
       }
 
-      const response = await fetch(API_URL, {
+      await fetch(API_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain;charset=utf-8',
         },
         body: JSON.stringify(payload),
       })
 
-      // Update local state to reflect the change
-      onSave(item)
-
-      // Return success
       return true
     } catch (error) {
       console.error('Saqlashda xatolik:', error)

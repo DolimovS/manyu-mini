@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { X, Lock } from 'lucide-react'
 
 const DEFAULT_PIN = '1234'
@@ -7,11 +7,14 @@ export default function AdminPinModal({ isOpen, onClose, onSuccess }) {
   const [pin, setPin] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const inputRef = useRef(null)
 
   useEffect(() => {
     if (isOpen) {
       setPin('')
       setError('')
+      const frame = window.requestAnimationFrame(() => inputRef.current?.focus())
+      return () => window.cancelAnimationFrame(frame)
     }
   }, [isOpen])
 
@@ -65,6 +68,7 @@ export default function AdminPinModal({ isOpen, onClose, onSuccess }) {
 
           <div>
             <input
+              ref={inputRef}
               type="password"
               value={pin}
               onChange={(e) => {
