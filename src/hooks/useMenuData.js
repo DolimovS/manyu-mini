@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const SHEET_URL = 'https://opensheet.elk.sh/1RpAZ816MUyW1donE0owJTUvzFWsMNtTnCtti79csfQA/restaran'
+const SHEET_URL = 'https://opensheet.elk.sh/1RpAZ816MUyW1donE0owJTUvzFWsMNtTnCtti79csfQA/menyu'
 export function useMenuData() {
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'error'
