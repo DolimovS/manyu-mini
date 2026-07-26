@@ -6,6 +6,9 @@ import CategoryTabs from './components/CategoryTabs'
 import CategorySection from './components/CategorySection'
 import EmptyState from './components/EmptyState'
 import CardSkeleton from './components/CardSkeleton'
+import AdminPinModal from './components/AdminPinModal'
+import AdminPanel from './components/AdminPanel'
+import Toast from './components/Toast'
 import { useMenuData } from './hooks/useMenuData'
 import {
   ALL_LABEL,
@@ -17,10 +20,22 @@ import {
 const MIN_SPLASH_MS = 1600
 
 export default function App() {
-  const { items, status } = useMenuData()
+  const { items: initialItems, status } = useMenuData()
+  const [items, setItems] = useState(initialItems)
   const [minTimeElapsed, setMinTimeElapsed] = useState(false)
   const [query, setQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState(ALL_LABEL)
+  
+  // Admin states
+  const [isPinModalOpen, setIsPinModalOpen] = useState(false)
+  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
+  const [toastType, setToastType] = useState('success')
+
+  useEffect(() => {
+    setItems(initialItems)
+  }, [initialItems])
 
   useEffect(() => {
     const t = setTimeout(() => setMinTimeElapsed(true), MIN_SPLASH_MS)
@@ -28,6 +43,36 @@ export default function App() {
   }, [])
 
   const showSplash = status === 'loading' || !minTimeElapsed
+
+  const handleAdminClick = () => {
+    setIsPinModalOpen(true)
+  }
+
+  const handlePinSuccess = () => {
+    setIsPinModalOpen(false)
+    setIsAdminPanelOpen(true)
+  }
+
+  const handleAdminPanelClose = () => {
+    setIsAdminPanelOpen(false)
+  }
+
+  const handleAdminSave = (savedItem) => {
+    setItems((prev) =>
+      prev.map((item) =>
+        item.id === savedItem.id
+          ? {
+              ...item,
+              price: savedItem.price,
+              is_available: savedItem.is_available ? 'TRUE' : 'FALSE',
+            }
+          : item
+      )
+    )
+    setToastMessage('Muvaffaqiyatli saqlandi!')
+    setToastType('success')
+    setShowToast(true)
+  }
 
   const categories = useMemo(() => {
     const set = new Set(items.map((i) => i.category).filter(Boolean))
@@ -66,8 +111,29 @@ export default function App() {
     <div className="min-h-screen bg-zamin-cream">
       <Splash visible={showSplash} />
 
+      <AdminPinModal
+        isOpen={isPinModalOpen}
+        onClose={() => setIsPinModalOpen(false)}
+        onSuccess={handlePinSuccess}
+      />
+
+      {isAdminPanelOpen && (
+        <AdminPanel
+          items={items}
+          onClose={handleAdminPanelClose}
+          onSave={handleAdminSave}
+        />
+      )}
+
+      <Toast
+        message={toastMessage}
+        type={toastType}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+      />
+
       <div className="sticky top-0 z-30 shadow-sm">
-        <Header query={query} onQueryChange={setQuery} />
+        <Header query={query} onQueryChange={setQuery} onAdminClick={handleAdminClick} />
         {categories.length > 0 && (
           <CategoryTabs
             categories={[ALL_LABEL, ...categories]}

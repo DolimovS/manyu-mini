@@ -1,6 +1,6 @@
-import { Search, X } from 'lucide-react'
+import { Search, X, Lock } from 'lucide-react'
 
-export default function Header({ query, onQueryChange }) {
+export default function Header({ query, onQueryChange, onAdminClick }) {
   return (
     <header className="bg-zamin-cream/95 backdrop-blur-sm">
       <div className="mx-auto flex max-w-2xl items-center justify-between px-5 pt-5">
@@ -12,6 +12,14 @@ export default function Header({ query, onQueryChange }) {
             Milliylik va Zamonaviylik
           </p>
         </div>
+        <button
+          type="button"
+          onClick={onAdminClick}
+          aria-label="Admin"
+          className="rounded-full p-2.5 text-zamin-stone transition-all hover:bg-zamin-paper hover:text-zamin-gold active:scale-95"
+        >
+          <Lock className="h-5 w-5" strokeWidth={2} />
+        </button>
       </div>
 
       <div className="mx-auto max-w-2xl px-5 pb-3 pt-4">
