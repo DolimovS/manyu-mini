@@ -53,26 +53,25 @@ export default function AdminPanel({ items, onClose, onSave }) {
 
     setSavingIds((prev) => new Set([...prev, item.id]))
 
-    onSave({
-      ...normalizedItem,
-      price: normalizedItem.price,
-      is_available: normalizedItem.is_available,
-    })
-
     try {
       const payload = {
         id: normalizedItem.id,
         price: normalizedItem.price,
-        is_available: normalizedItem.is_available ? 'TRUE' : 'FALSE',
+        is_available: String(normalizedItem.is_available).toUpperCase(),
       }
 
       await fetch(API_URL, {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'text/plain;charset=utf-8',
         },
         body: JSON.stringify(payload),
+      })
+
+      onSave({
+        ...normalizedItem,
+        price: normalizedItem.price,
+        is_available: normalizedItem.is_available,
       })
 
       return true
